@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FindDriveApp.Views.NewOrderPage"
+             Shell.PresentationMode="ModalAnimated"
+             Title="Добавить запись">
+    <ContentPage.Content>
+        <StackLayout Margin="20">
+            <StackLayout>
+                <Label Text="Откуда:"/>
+                <Picker 
+                    ItemsSource="{Binding Cities}" 
+                    ItemDisplayBinding="{Binding Name}" 
+                    SelectedItem="{Binding SelectedFromCity}"/>
+            </StackLayout>
+
+            <StackLayout>
+                <Label Text="Куда:"/>
+                <Picker 
+                    ItemsSource="{Binding Cities}" 
+                    ItemDisplayBinding="{Binding Name}" 
+                    SelectedItem="{Binding SelectedToCity}"/>
+            </StackLayout>
+
+            <StackLayout>
+                <Label Text="Тип объявления:" />
+                <Picker 
+                    ItemsSource="{Binding OrderTypes}"
+                    ItemDisplayBinding="{Binding TypeName}"
+                    SelectedItem="{Binding SelectedOrderType}"/>
+            </StackLayout>
+
+            <StackLayout>
+                <Label Text="Дата отъезда:" />
+                <DatePicker Date="{Binding SelectedOutDate}"/>
+            </StackLayout>
+
+            <StackLayout>
+                <Label Text="Время отъезда:" />
+                <TimePicker Time="{Binding SelectedOutTime}"/>
+            </StackLayout>
+
+            <StackLayout Orientation="Horizontal">
+                <Button 
+                    Text="Сохранить" 
+                    Command="{Binding SaveCommand}"
+                    HorizontalOptions="FillAndExpand"/>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

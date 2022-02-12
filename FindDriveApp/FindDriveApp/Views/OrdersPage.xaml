@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FindDriveApp.Views.OrdersPage"
+             Title="{Binding Title}">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Поиск" Command="{Binding CommandFindOrder}"/>
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <RefreshView Command="{Binding LoadOrdersCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+            <StackLayout>
+                <CollectionView 
+                    x:Name="OrdersCollection"
+                    ItemsSource="{Binding Orders}"
+                    SelectionMode="Single">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout Padding="5">
+                                <Frame
+                                    BackgroundColor="#CC9DA8B1"
+                                    CornerRadius="5"
+                                    Padding="8"
+                                    Margin="5"
+                                    HasShadow="True">
+                                    <StackLayout>
+                                        <Label FontSize="Medium" FontAttributes="Bold">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="{Binding FromCityName}"/>
+                                                    <Span Text=" - "/>
+                                                    <Span Text="{Binding ToCityName}"/>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                        <Label Margin="10,0,0,0" FontSize="Small">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="Тип объявления: "/>
+                                                    <Span Text="{Binding OrderTypeName}"/>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                        <Label Margin="10,0,0,0" FontSize="Small">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="Дата и время отъезда: "/>
+                                                    <Span Text="{Binding DateStamp, StringFormat='{0:dd MMMM yyyy}'}"/>
+                                                    <Span Text=" "/>
+                                                    <Span Text="{Binding DateStamp, StringFormat='{}{0:hh\\:mm}'}"/>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                    </StackLayout>
+                                </Frame>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </StackLayout>
+        </RefreshView>
+    </ContentPage.Content>
+</ContentPage>
