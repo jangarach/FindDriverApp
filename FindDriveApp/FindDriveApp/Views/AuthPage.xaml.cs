@@ -4,19 +4,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace FindDriveApp.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class LoginPage : ContentPage
+    public partial class AuthPage : ContentPage
     {
-        private readonly LoginViewModel _loginViewModel;
-        public LoginPage()
+        private readonly AuthViewModel _authViewModel;
+        public AuthPage()
         {
             InitializeComponent();
-            this.BindingContext = _loginViewModel = Startup.Resolve<LoginViewModel>();
+            BindingContext = _authViewModel = Startup.Resolve<AuthViewModel>();
         }
     }
 }

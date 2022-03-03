@@ -68,7 +68,7 @@ namespace FindDriveApp.ViewModels
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                _message.DisplayAlert("Ошибка при загрузке данных", ex.Message);
             }
         }
 
@@ -113,7 +113,7 @@ namespace FindDriveApp.ViewModels
                     DateOut = SelectedOutDate + SelectedOutTime,
                 };
                 await _orderService.CreateOrder(order);
-                _message.LongAlert("Запись успешно добавлена!");
+                _message.LongToastAlert("Запись успешно добавлена!");
                 await Shell.Current.GoToAsync("..");
             }
             catch (Exception ex)

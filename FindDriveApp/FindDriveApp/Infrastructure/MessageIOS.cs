@@ -14,11 +14,11 @@ namespace FindDriveApp.Infrastructure
         NSTimer alertDelay;
         UIAlertController alert;
 
-        public void LongAlert(string message)
+        public void LongToastAlert(string message)
         {
             ShowAlert(message, LONG_DELAY);
         }
-        public void ShortAlert(string message)
+        public void ShortToastAlert(string message)
         {
             ShowAlert(message, SHORT_DELAY);
         }
@@ -43,6 +43,11 @@ namespace FindDriveApp.Infrastructure
             {
                 alertDelay.Dispose();
             }
+        }
+
+        public async void DisplayAlert(string title, string message)
+        {
+            await App.Current.MainPage.DisplayAlert(title, message, "Ok");
         }
     }
 }

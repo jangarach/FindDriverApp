@@ -1,4 +1,5 @@
-﻿using FindDriveApp.Models;
+﻿using FindDriveApp.Infrastructure;
+using FindDriveApp.Models;
 using FindDriveApp.Services.Interfaces;
 using FindDriveApp.Views;
 using System;
@@ -10,13 +11,15 @@ namespace FindDriveApp.ViewModels
 {
     public class OrdersViewModel : BaseViewModel
     {
+        private readonly IMessage _message;
         private readonly IOrderService _orderService;
         public ObservableCollection<Order> Orders { get; set; }
         public Command LoadOrdersCommand { get; }
         public Command CommandFindOrder { get; }
-        public OrdersViewModel(IOrderService orderService)
+        public OrdersViewModel(IMessage message, IOrderService orderService)
         {
             Title = "Все объявления";
+            _message = message;
             _orderService = orderService;
             Orders = new ObservableCollection<Order>();
             LoadOrdersCommand = new Command(async () => await ExecuteLoadOrdersCommand());
@@ -39,7 +42,7 @@ namespace FindDriveApp.ViewModels
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                _message.DisplayAlert("Ошибка при загрузке", ex.Message);
             }
             finally
             {

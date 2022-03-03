@@ -6,7 +6,8 @@ namespace FindDriveApp.Infrastructure
 {
     public interface IMessage
     {
-        void LongAlert(string message);
-        void ShortAlert(string message);
+        void LongToastAlert(string message);
+        void ShortToastAlert(string message);
+        void DisplayAlert(string title, string message);
     }
 }

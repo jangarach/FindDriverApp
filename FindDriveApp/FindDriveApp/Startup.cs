@@ -4,6 +4,7 @@ using FindDriveApp.Services.Interfaces;
 using FindDriveApp.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Net.Http;
 
 namespace FindDriveApp
 {
@@ -14,8 +15,7 @@ namespace FindDriveApp
         {
             var services = new ServiceCollection();
 
-            var baseAddress = new Uri("http://10.0.2.2:5000/api/"); 
-
+            var baseAddress = new Uri("http://10.0.2.2:5000/api/");
             //add services
             services.AddHttpClient<IOrderService, OrderService>(c =>
             {
@@ -30,7 +30,7 @@ namespace FindDriveApp
             });
 
             services.AddSingleton<IMessage, MessageAndroid>();
-
+            services.AddTransient<AuthViewModel>();
             services.AddTransient<OrdersViewModel>();
             services.AddTransient<NewOrderViewModel>();
             services.AddTransient<FindOrderViewModel>();
