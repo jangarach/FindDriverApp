@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FindDriveApp.Views.UserRegistrationPage"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             Title="Регистрация">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="InvalidStyle" TargetType="Entry">
+                <Setter Property="TextColor" Value="Red" />
+            </Style>
+            <Style x:Key="ErrorTextStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="Small"/>
+                <Setter Property="Margin" Value="5,0"/>
+                <Setter Property="TextColor" Value="Red"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout Margin="20">
+            <Label Text="Логин:"/>
+            <Entry Text="{Binding Login}"/>
+            <Label Text="Имя пользователя:"/>
+            <Entry Text="{Binding Fullname}"/>
+            <Label Text="Пароль:"/>
+            <Entry x:Name="PasswordEntry" Text="{Binding Password, Mode=TwoWay}">
+                <Entry.Behaviors>
+                    <xct:MultiValidationBehavior x:Name="ValidatePasswordEntry" 
+                                                 InvalidStyle="{StaticResource InvalidStyle}" 
+                                                 Errors="{Binding ValidationErrors}" 
+                                                 IsValid="{Binding IsValidPassword, Mode=OneWayToSource}"
+                                                 Flags="ValidateOnAttaching,ValidateOnValueChanging,ValidateOnFocusing">
+                        <xct:TextValidationBehavior MinimumLength="3" 
+                                                    xct:MultiValidationBehavior.Error="*Пароль должен быть больше 3 символов"/>
+                        <xct:CharactersValidationBehavior CharacterType="Whitespace" MaximumCharacterCount="0" 
+                                                          xct:MultiValidationBehavior.Error="*Пароль не должен содержать пробелы"/>
+                        <!--<xct:CharactersValidationBehavior CharacterType="Digit"  MinimumCharacterCount="3" />-->
+                        <!--<xct:CharactersValidationBehavior CharacterType="LowercaseLetter" MinimumCharacterCount="1" />
+                        <xct:CharactersValidationBehavior CharacterType="UppercaseLetter" MinimumCharacterCount="1" />-->
+                        
+                    </xct:MultiValidationBehavior>
+                </Entry.Behaviors>
+            </Entry>
+            <Label Style="{StaticResource ErrorTextStyle}" Text="{Binding Errors[0], Source={x:Reference ValidatePasswordEntry}}"/>
+            <Label Text="Повторите пароль:"/>
+            <Entry>
+                <Entry.Behaviors>
+                    <xct:RequiredStringValidationBehavior x:Name="ValidatePasswordRepeat" 
+                                                          InvalidStyle="{StaticResource InvalidStyle}" 
+                                                          IsValid="{Binding IsValidRepeatPassword, Mode=OneWayToSource}"
+                                                          RequiredString="{Binding Text,  Source={x:Reference PasswordEntry}}"
+                                                          Flags="ValidateOnAttaching,ValidateOnValueChanging,ValidateOnFocusing"/>
+                </Entry.Behaviors>
+            </Entry>
+            <Button Text="Зарегистрировать" Command="{Binding RegistrationCommand}"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

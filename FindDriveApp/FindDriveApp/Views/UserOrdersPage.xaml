@@ -1,19 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="FindDriveApp.Views.OrdersPage"
+             x:Class="FindDriveApp.Views.UserOrdersPage"
              xmlns:vm="clr-namespace:FindDriveApp.ViewModels"
-             Title="{Binding Title}">
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Поиск" Command="{Binding FindOrderCommand}"/>
-    </ContentPage.ToolbarItems>
+             Title="Профиль">
     <ContentPage.Content>
-        <RefreshView Command="{Binding LoadOrdersCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
-            <StackLayout>
+        <StackLayout>
+            <RefreshView Command="{Binding LoadOrdersCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
                 <CollectionView 
                     x:Name="OrdersCollection"
-                    ItemsSource="{Binding Orders}"
-                    SelectionMode="Single">
+                    ItemsSource="{Binding ActiveOrders}"
+                    SelectionMode="None">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <StackLayout Padding="5">
@@ -51,20 +48,21 @@
                                                 </FormattedString>
                                             </Label.FormattedText>
                                         </Label>
+                                        <StackLayout>
+                                            <Button Text="Закрыть объявление" 
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:UserOrdersViewModel}}, Path=CloseOrderCommand}"
+                                                    CommandParameter="{Binding .}"/>
+                                            <Button Text="Редактировать"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:UserOrdersViewModel}}, Path=EditOrderCommand}"
+                                                    CommandParameter="{Binding .}"/>
+                                        </StackLayout>
                                     </StackLayout>
                                 </Frame>
-                                <StackLayout.GestureRecognizers>
-                                    <TapGestureRecognizer 
-                                        NumberOfTapsRequired="1"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:OrdersViewModel}}, Path=OrderTappedCommand}"		
-                                        CommandParameter="{Binding .}">
-                                    </TapGestureRecognizer>
-                                </StackLayout.GestureRecognizers>
                             </StackLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-            </StackLayout>
-        </RefreshView>
+            </RefreshView>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

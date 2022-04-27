@@ -1,25 +1,58 @@
-﻿using FindDriveApp.Views;
+﻿using FindDriveApp.Infrastructure;
+using FindDriveApp.Services.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace FindDriveApp.ViewModels
 {
     public class LoginViewModel : BaseViewModel
     {
-        public Command LoginCommand { get; }
-
-        public LoginViewModel()
+        private readonly IMessage _message;
+        private readonly IUserService _userService; 
+        public Command SimpleAuthCommand { get; set; }
+        public Command GoogleAuthCommand { get; set; }
+        public Command FacebookAuthCommand { get; set; }
+        public Command RegistrationCommand { get; set; }
+        public LoginViewModel(IMessage message, IUserService userService)
         {
-            LoginCommand = new Command(OnLoginClicked);
+            _message = message;
+            _userService = userService;
+
+            SimpleAuthCommand = new Command(async () => await OnAuthenticate("Simple"));
+            GoogleAuthCommand = new Command(async () => await OnAuthenticate("Google"));
+            FacebookAuthCommand = new Command(async () => await OnAuthenticate("Facebook"));
+            RegistrationCommand = new Command(async () => await OnRegistration());
         }
 
-        private async void OnLoginClicked(object obj)
+        private async Task OnAuthenticate(string scheme)
         {
-            // Prefixing with `//` switches to a different navigation stack instead of pushing to the active one
-            //await Shell.Current.GoToAsync($"//{nameof(AboutPage)}");
+            try
+            {
+                if (scheme == "Google")
+                {
+                    var result = await _userService.ExternalAuthAsync("Google");
 
+                    if (result == false)
+                    {
+                        _message.DisplayAlert("Не удалось авторизоваться", "Попробуйте войти в систему через внутренний сервис.");
+                    }
+                    await Shell.Current.Navigation.PopModalAsync();
+                    //await Shell.Current.GoToAsync("..");
+                }
+            }
+            catch (TaskCanceledException)
+            {
+                //Note: User exited auth flow;
+            }
+            catch (Exception e)
+            {
+                _message.DisplayAlert("Ошибка при авторизации", e.Message); 
+            }
+        }
+
+        private async Task OnRegistration()
+        {
 
         }
     }

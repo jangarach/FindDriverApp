@@ -27,6 +27,16 @@
                     </VisualStateGroupList>
                 </Setter>
             </Style>
+            
+            <Style x:Key="TitleTextStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="Title"/>
+            </Style>
+            <Style x:Key="SubTitleTextStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="Subtitle"/>
+            </Style>
+            <Style x:Key="DescriptionTextStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="Medium"/>
+            </Style>
         </ResourceDictionary>        
     </Application.Resources>
 </Application>

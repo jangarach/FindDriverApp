@@ -1,12 +1,43 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="FindDriveApp.Views.OrderDetailPage">
+             x:Class="FindDriveApp.Views.OrderDetailPage"
+             Title="Детали заказа">
+    <ContentPage.Resources>
+        <Style x:Key="LblSubTitleStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="Subtitle"/>
+        </Style>
+        <Style x:Key="LblSubTitleTextStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="Subtitle"/>
+        </Style>
+    </ContentPage.Resources>
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <Grid ColumnSpacing="5" ColumnDefinitions="Auto,*" RowDefinitions="40,40,40,40,40,Auto" Margin="20">
+            <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource LblSubTitleStyle}" Text="Откуда:"/>
+            <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource LblSubTitleTextStyle}" Text="{Binding Order.FromCityName}"/>
+
+            <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource LblSubTitleStyle}" Text="Куда:"/>
+            <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource LblSubTitleTextStyle}" Text="{Binding Order.ToCityName}"/>
+
+            <Label Grid.Row="2" Grid.Column="0" Style="{StaticResource LblSubTitleStyle}" Text="Дата и время отъезда:"/>
+            <Label Grid.Row="2" Grid.Column="1" Style="{StaticResource LblSubTitleTextStyle}" Text="{Binding Order.DateOut, StringFormat='{dd.mm.yyyy hh:mm}'}"/>
+            
+            <Label Grid.Row="3" Grid.Column="0" Style="{StaticResource LblSubTitleStyle}" Text="Кол-во пассажиров:"/>
+            <Label Grid.Row="3" Grid.Column="1" Style="{StaticResource LblSubTitleTextStyle}" Text="{Binding Order.PassengersCount}"/>
+
+            <Label Grid.Row="4" Grid.Column="0" Style="{StaticResource LblSubTitleStyle}" Text="Комментарий к заказу:"/>
+            <StackLayout Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
+                <Frame OutlineColor="Black" Padding="5" HeightRequest="100">
+                    <ScrollView>
+                        <Label 
+                            HorizontalTextAlignment="Start" 
+                            VerticalTextAlignment="Start" 
+                            Text="{Binding Order.Comment}"/>
+                    </ScrollView>
+                </Frame>
+                <Button Text="Показать номер"/>
+                <Button Text="Откликнуться"/>
+            </StackLayout>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

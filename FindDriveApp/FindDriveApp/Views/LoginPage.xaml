@@ -1,14 +1,54 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d"
-             x:Class="FindDriveApp.Views.LoginPage"
-             Shell.NavBarIsVisible="False">
+             xmlns:fa="clr-namespace:FontAwesome"
+             x:Class="FindDriveApp.Views.LoginPage">
     <ContentPage.Content>
-        <StackLayout Padding="10,0,10,0" VerticalOptions="Center">
-            <Button VerticalOptions="Center" Text="Login" Command="{Binding LoginCommand}"/>
-        </StackLayout>
+        <Grid>
+            <Label VerticalOptions="Start" HorizontalOptions="CenterAndExpand" FontSize="Title" Text="Войти"/>
+            <Frame VerticalOptions="Center" Margin="50" BackgroundColor="#E8E8E8" Padding="20">
+                <StackLayout>
+                    <Label Text="Логин:"/>
+                    <Entry Text="{Binding Username}"/>
+
+                    <Label Text="Пароль:"/>
+                    <Entry Text="{Binding Password}"/>
+
+                    <Button Text="Войти"
+                            BackgroundColor="#4285F4"
+                            FontAttributes="Bold"
+                            TextColor="White"
+                            HorizontalOptions="Center"
+                            Command="{Binding LoginCommand}"/>
+                    <Button Text="Войти через Google"
+                            BackgroundColor="#1877F2"
+                            FontAttributes="Bold"
+                            TextColor="White"
+                            Command="{Binding GoogleAuthCommand}">
+                        <Button.ImageSource>
+                            <FontImageSource FontFamily="FABrands" Glyph="{x:Static fa:FontAwesomeIcons.Google}" Color="White"/>
+                        </Button.ImageSource>
+                    </Button>
+                    <Button Text="Войти через Facebook"
+                            BackgroundColor="#1877F2"
+                            FontAttributes="Bold"
+                            TextColor="White"
+                            Command="{Binding FacebookAuthCommand}">
+                        <Button.ImageSource>
+                            <FontImageSource  FontFamily="FABrands" Glyph="{x:Static fa:FontAwesomeIcons.Facebook}" Color="Blue"/>
+                        </Button.ImageSource>
+                    </Button>
+                    <Button Text="Регистрация"
+                            BackgroundColor="#4285F4"
+                            FontAttributes="Bold"
+                            TextColor="White"
+                            Command="{Binding GoogleAuthCommand}">
+                        <Button.ImageSource>
+                            <FontImageSource FontFamily="FASolid" Glyph="{x:Static fa:FontAwesomeIcons.AddressCard}" Color="White"/>
+                        </Button.ImageSource>
+                    </Button>
+                </StackLayout>
+            </Frame>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

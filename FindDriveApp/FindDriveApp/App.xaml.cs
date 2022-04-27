@@ -1,9 +1,4 @@
-﻿using FindDriveApp.Models;
-using FindDriveApp.Services;
-using FindDriveApp.Views;
-using System;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
+﻿using Xamarin.Forms;
 
 namespace FindDriveApp
 {
@@ -13,7 +8,6 @@ namespace FindDriveApp
         {
             InitializeComponent();
             Startup.ConfigureServices();
-            DependencyService.Register<MockDataStore>();
             MainPage = new AppShell();
         }
 

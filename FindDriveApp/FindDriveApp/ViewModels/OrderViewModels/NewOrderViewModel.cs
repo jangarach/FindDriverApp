@@ -1,43 +1,31 @@
 ﻿using FindDriveApp.Infrastructure;
 using FindDriveApp.Models;
-using FindDriveApp.Services;
 using FindDriveApp.Services.Interfaces;
 using FindDriveApp.Views;
 using System;
 using System.Collections.ObjectModel;
+using System.Net;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace FindDriveApp.ViewModels
 {
-    public class NewOrderViewModel : BaseViewModel
+    public class NewOrderViewModel : OrderBaseViewModel
     {
-        private readonly IMessage _message;
-        private readonly IOrderService _orderService;
-        private readonly IOrderReferencesService _orderReferencesService;
-
-
-        private City _selectedFromCity;
-        private City _selectedToCity;
-        private OrderType _selectedOrderType;
-        private DateTime _selectedOutDate = DateTime.Now;
-        private TimeSpan _selectedOutTime = DateTime.Now.TimeOfDay;
-        public ObservableCollection<City> Cities { get; set; }
-        public ObservableCollection<OrderType> OrderTypes { get; set; }
-
+        private readonly IAuthStore _authStore;
         public Command CancelCommand { get; set; }
         public Command SaveCommand { get; set; }
 
         public NewOrderViewModel(IOrderService orderService,
                                  IOrderReferencesService orderReferencesService,
+                                 IAuthStore authStore,
                                  IMessage message)
+            :base(message)
         {
             _message = message;
+            _authStore = authStore;
             _orderService = orderService;
             _orderReferencesService = orderReferencesService;
-
-            Cities = new ObservableCollection<City>();
-            OrderTypes = new ObservableCollection<OrderType>();
 
             SaveCommand = new Command(OnSave, ValidateSave);
             CancelCommand = new Command(OnCancel);
@@ -50,6 +38,9 @@ namespace FindDriveApp.ViewModels
         {
             try
             {
+                if (Cities.Count > 0 && OrderTypes.Count > 0)
+                    return;
+
                 var citiesTask = _orderReferencesService.GetAllCities();
                 var orderTypesTask = _orderReferencesService.GetAllOrderTypes();
                 await Task.WhenAll(citiesTask, orderTypesTask);
@@ -76,36 +67,7 @@ namespace FindDriveApp.ViewModels
             }
         }
 
-
-        public City SelectedFromCity
-        {
-            get => _selectedFromCity;
-            set => SetProperty(ref _selectedFromCity, value);
-        }
-
-        public City SelectedToCity
-        {
-            get => _selectedToCity;
-            set => SetProperty(ref _selectedToCity, value);
-        }
-
-        public OrderType SelectedOrderType
-        {
-            get => _selectedOrderType;
-            set => SetProperty(ref _selectedOrderType, value);
-        }
-
-        public DateTime SelectedOutDate
-        {
-            get => _selectedOutDate;
-            set => SetProperty(ref _selectedOutDate, value);
-        }
-
-        public TimeSpan SelectedOutTime
-        {
-            get => _selectedOutTime;
-            set => SetProperty(ref _selectedOutTime, value);
-        }
+        
 
         private bool ValidateSave()
         {
@@ -123,21 +85,48 @@ namespace FindDriveApp.ViewModels
         {
             try
             {
+                if (_authStore.IsAuthorized == false)
+                {
+                    UnAuthenticateHandler();
+                    return;
+                }
+
                 var order = new Order()
                 {
                     FromCityId = SelectedFromCity.Id,
                     ToCityId = SelectedToCity.Id,
                     DateOut = SelectedOutDate + SelectedOutTime,
+                    DateStamp = DateTime.Now,
                     OrderTypeId = SelectedOrderType.Id,
+                    UserId = _authStore.UserId,
+                    Comment = Comment,
+                    PhoneNumber = PhoneNumber,
+                    PassengersCount = PassengersCount
                 };
-                await _orderService.CreateOrder(order);
-                _message.LongToastAlert("Запись успешно добавлена!");
-                await Shell.Current.GoToAsync("..");
+
+                var response = await _orderService.CreateOrder(order, _authStore.AccessToken);
+
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    UnAuthenticateHandler();
+                    return;
+                }
+                else
+                {
+                    _message.LongToastAlert("Запись успешно добавлена!");
+                    await Shell.Current.GoToAsync($"//{nameof(OrdersPage)}");
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                _message.DisplayAlert("Ошибка во время добавления записи!", ex.Message);
             }
+        }
+
+        private async void UnAuthenticateHandler()
+        {
+            _message.LongToastAlert("Необходимо авторизоваться");
+            await Shell.Current.Navigation.PushModalAsync(new LoginPage());
         }
     }
 }

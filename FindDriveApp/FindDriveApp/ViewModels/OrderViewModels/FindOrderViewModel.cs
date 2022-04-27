@@ -1,41 +1,32 @@
 ﻿using FindDriveApp.Infrastructure;
 using FindDriveApp.Models;
-using FindDriveApp.Services;
 using FindDriveApp.Services.Interfaces;
+using FindDriveApp.Views;
 using System;
 using System.Collections.ObjectModel;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace FindDriveApp.ViewModels
 {
-    public class FindOrderViewModel : BaseViewModel
+    public class FindOrderViewModel : OrderBaseViewModel
     {
-        private readonly IMessage _message;
-        private readonly IOrderService _orderService;
-        private readonly IOrderReferencesService _orderReferencesService;
-
-        private City _selectedFromCity;
-        private City _selectedToCity;
-        private DateTime _selectedOutDate = DateTime.Now;
-        private TimeSpan _selectedOutTime = DateTime.Now.TimeOfDay;
-        public ObservableCollection<City> Cities { get; set; }
-        public ObservableCollection<OrderType> OrderTypes { get; set; }
         public Command SaveCommand { get; set; }
 
-        public FindOrderViewModel(IOrderService orderService, 
-                                  IOrderReferencesService orderReferencesService, 
-                                  IMessage message
+        public FindOrderViewModel(IMessage message,
+                                  IOrderService orderService, 
+                                  IOrderReferencesService orderReferencesService
+                                  
             )
+            :base(message)
         {
             Title = "Поиск объявления";
+            _message = message;
             _orderService = orderService;
             _orderReferencesService = orderReferencesService;
-            _message = message;
-
+            
             Cities = new ObservableCollection<City>();
-            OrderTypes = new ObservableCollection<OrderType>();
-
             SaveCommand = new Command(OnFindOrder, ValidateFind);
 
             this.PropertyChanged +=
@@ -72,31 +63,6 @@ namespace FindDriveApp.ViewModels
             }
         }
 
-
-        public City SelectedFromCity
-        {
-            get => _selectedFromCity;
-            set => SetProperty(ref _selectedFromCity, value);
-        }
-
-        public City SelectedToCity
-        {
-            get => _selectedToCity;
-            set => SetProperty(ref _selectedToCity, value);
-        }
-
-        public DateTime SelectedOutDate
-        {
-            get => _selectedOutDate;
-            set => SetProperty(ref _selectedOutDate, value);
-        }
-
-        public TimeSpan SelectedOutTime
-        {
-            get => _selectedOutTime;
-            set => SetProperty(ref _selectedOutTime, value);
-        }
-
         private bool ValidateFind()
         {
             return SelectedFromCity != null && SelectedToCity != null;
@@ -106,15 +72,14 @@ namespace FindDriveApp.ViewModels
         {
             try
             {
-                var order = new Order()
+                var orderFilter = new OrderFilter
                 {
                     FromCityId = SelectedFromCity.Id,
                     ToCityId = SelectedToCity.Id,
+                    OrderTypeId = SelectedOrderType.Id,
                     DateOut = SelectedOutDate + SelectedOutTime,
                 };
-                await _orderService.CreateOrder(order);
-                _message.LongToastAlert("Запись успешно добавлена!");
-                await Shell.Current.GoToAsync("..");
+                await Shell.Current.GoToAsync($"//{nameof(OrdersPage)}?ordersFilter={JsonSerializer.Serialize(orderFilter)}");
             }
             catch (Exception ex)
             {

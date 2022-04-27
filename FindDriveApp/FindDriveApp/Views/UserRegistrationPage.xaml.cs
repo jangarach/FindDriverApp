@@ -11,13 +11,13 @@ using Xamarin.Forms.Xaml;
 namespace FindDriveApp.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class LoginPage : ContentPage
+    public partial class UserRegistrationPage : ContentPage
     {
-        private readonly LoginViewModel _authViewModel;
-        public LoginPage()
+        private readonly UserRegistrationViewModel _userRegistrationViewModel;
+        public UserRegistrationPage()
         {
             InitializeComponent();
-            BindingContext = _authViewModel = Startup.Resolve<LoginViewModel>();
+            BindingContext = _userRegistrationViewModel = Startup.Resolve<UserRegistrationViewModel>();
         }
     }
 }

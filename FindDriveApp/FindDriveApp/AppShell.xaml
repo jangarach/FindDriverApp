@@ -2,15 +2,9 @@
 <Shell xmlns="http://xamarin.com/schemas/2014/forms" 
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:local="clr-namespace:FindDriveApp.Views"
+       xmlns:fonts="clr-namespace:FontAwesome"
        Title="FindDriveApp"
        x:Class="FindDriveApp.AppShell">
-
-    <!--
-        The overall app visual hierarchy is defined here, along with navigation.
-    
-        https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/shell/
-    -->
-
     <Shell.Resources>
         <ResourceDictionary>
             <Style x:Key="BaseStyle" TargetType="Element">
@@ -30,16 +24,22 @@
     </Shell.Resources>
 
     <TabBar>
-        <ShellContent Title="Общее" ContentTemplate="{DataTemplate local:OrdersPage}"/>
-        <ShellContent Title="Добавить" ContentTemplate="{DataTemplate local:NewOrderPage}"/>
-        <ShellContent Title="Войти" ContentTemplate="{DataTemplate local:AuthPage}"/>
-    </TabBar>
-
-    <!--
-        If you would like to navigate to this content you can do so by calling
-        await Shell.Current.GoToAsync("//LoginPage");
-    -->
-    <TabBar>
-        <ShellContent Route="LoginPage" ContentTemplate="{DataTemplate local:LoginPage}" />
+        <ShellContent Title="Общее" Route="OrdersPage" ContentTemplate="{DataTemplate local:OrdersPage}">
+            <ShellContent.Icon>
+                <FontImageSource FontFamily="FASolid" Glyph="{x:Static fonts:FontAwesomeIcons.List}" Color="White"/>
+            </ShellContent.Icon>
+        </ShellContent>
+        <ShellContent Title="Добавить" Route="NewOrderPage" ContentTemplate="{DataTemplate local:NewOrderPage}">
+            <ShellContent.Icon>
+                <FontImageSource FontFamily="FASolid" Glyph="{x:Static fonts:FontAwesomeIcons.CirclePlus}" Color="White"/>
+            </ShellContent.Icon>
+        </ShellContent>
+        <ShellContent Title="Профиль" Route="UserProfilePage" ContentTemplate="{DataTemplate local:UserProfilePage}">
+            <ShellContent.Icon>
+                <FontImageSource FontFamily="FASolid" Glyph="{x:Static fonts:FontAwesomeIcons.AddressCard}" Color="White"/>
+            </ShellContent.Icon>
+        </ShellContent>
+        <ShellContent Title="Настройки" Route="SettingsPage" ContentTemplate="{DataTemplate local:SettingsPage}"/>
+        <ShellContent Title="Регистрация" Route="Registration" ContentTemplate="{DataTemplate local:UserRegistrationPage}"/>
     </TabBar>
 </Shell>

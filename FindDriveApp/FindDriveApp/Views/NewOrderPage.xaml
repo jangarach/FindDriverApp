@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FindDriveApp.Views.NewOrderPage"
-             Shell.PresentationMode="ModalAnimated"
+             Shell.FlyoutBehavior="Disabled"
              Title="Добавить запись">
     <ContentPage.Content>
         <StackLayout Margin="20">
@@ -22,27 +22,42 @@
                     SelectedItem="{Binding SelectedToCity}"/>
             </StackLayout>
 
+            
+            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto">
+                <StackLayout Grid.Row="0" Grid.Column="0">
+                    <Label Text="Тип объявления:" />
+                    <Picker 
+                        ItemsSource="{Binding OrderTypes}"
+                        ItemDisplayBinding="{Binding TypeName}"
+                        SelectedItem="{Binding SelectedOrderType}"/>
+                </StackLayout>
+                <StackLayout Grid.Row="0" Grid.Column="1">
+                    <Label Text="Кол-во пассажиров:" />
+                    <Entry Keyboard="Numeric" Text="{Binding PassengersCount}"/>
+                </StackLayout>
+                
+                <StackLayout Grid.Row="1" Grid.Column="0">
+                    <Label Text="Дата отъезда:" />
+                    <DatePicker Date="{Binding SelectedOutDate}"/>
+                </StackLayout>
+                <StackLayout Grid.Row="1" Grid.Column="1">
+                    <Label Text="Время отъезда:" />
+                    <TimePicker Format="HH:mm" Time="{Binding SelectedOutTime}"/>
+                </StackLayout>
+            </Grid>
+
             <StackLayout>
-                <Label Text="Тип объявления:" />
-                <Picker 
-                    ItemsSource="{Binding OrderTypes}"
-                    ItemDisplayBinding="{Binding TypeName}"
-                    SelectedItem="{Binding SelectedOrderType}"/>
+                <Label Text="Номер телефона для связи:" />
+                <Entry Keyboard="Numeric" Text="{Binding PhoneNumber}"/>
             </StackLayout>
 
             <StackLayout>
-                <Label Text="Дата отъезда:" />
-                <DatePicker Date="{Binding SelectedOutDate}"/>
+                <Label Text="Комментарий к заказу:" />
+                <Editor HeightRequest="100" Text="{Binding Comment}" Placeholder="Введите текст комментария"/>
             </StackLayout>
-
+            
             <StackLayout>
-                <Label Text="Время отъезда:" />
-                <TimePicker Time="{Binding SelectedOutTime}"/>
-            </StackLayout>
-
-            <StackLayout Orientation="Horizontal">
-                <Button 
-                    Text="Сохранить" 
+                <Button Text="Сохранить" 
                     Command="{Binding SaveCommand}"
                     HorizontalOptions="FillAndExpand"/>
             </StackLayout>

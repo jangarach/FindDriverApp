@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FindDriveApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,7 @@ namespace FindDriveApp.Views
         public OrderDetailPage()
         {
             InitializeComponent();
+            BindingContext = Startup.Resolve<OrderDetailViewModel>();
         }
     }
 }
